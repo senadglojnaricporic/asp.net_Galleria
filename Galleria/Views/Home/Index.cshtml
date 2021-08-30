@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Galleria.Photo>
+
+@{
+    ViewData["Title"] = "Home Page";
+    
+    //only first item in carousel is active
+    int itemNumber = 1;
+    String Active(int i)
+    {
+        if(i == 1)
+        {
+            return "active";
+        }
+        else
+        {
+            return "";
+        }
+    }
+}
+
+<div class="container position-absolute vh-100 vw-100" style="top:0; z-index:-100">
+    <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="d-flex h-25">
+            <div class="text-center w-75 d-none d-lg-block">
+                <h1 class="fancyFont display-1">Galleria</h1>
+                <h3 class="fancyFont">a place to relax and enjoy...</h3>
+            </div>
+            <div class="text-center d-lg-none">
+                <h1 class="fancyFont display-3">Galleria</h1>
+                <h4 class="fancyFont">a place to relax and enjoy...</h4>
+            </div>
+            <div class="d-none d-lg-block w-25">
+                <div class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+@foreach (var item in Model){
+                        <div class="carousel-item @Active(itemNumber)">
+                            <img src="@item.FileUrl" class="d-block w-100" alt="...">
+                        </div>
+                        itemNumber += 1;
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

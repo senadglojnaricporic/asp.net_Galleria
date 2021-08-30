@@ -1,0 +1,20 @@
+@inject SignInManager<IdentityUser> SignInManager
+@{
+    var userManager = SignInManager.UserManager;
+    var user = await userManager.GetUserAsync(User);
+    var isAdmin = await userManager.IsInRoleAsync(user, "Admin");
+}
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+    <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li>
+    @if(isAdmin)
+    {
+        <li class="nav-item"><a class="nav-link @ManageNavPages.ManageDataNavClass(ViewContext)" id="manage-data" asp-page="./ManageData" >Manage data</a></li>
+    }
+    else
+    {
+        <li class="nav-item"><a class="nav-link @ManageNavPages.UploadImageNavClass(ViewContext)" id="upload-image" asp-page="./UploadImage" >Upload image</a></li>
+    }
+</ul>

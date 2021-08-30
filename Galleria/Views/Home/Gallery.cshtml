@@ -1,0 +1,19 @@
+@model IEnumerable<Galleria.Photo>
+
+@{
+    ViewData["Title"] = "Gallery";
+}
+<h1>@ViewData["Title"]</h1>
+
+
+<div class="container mt-5">
+    <div class="row text-center text-lg-left">
+@foreach (var item in Model) {
+        <div class="col-lg-3 col-md-4 col-6">
+            <a asp-action="Review" asp-route-id="@item.PhotoId" class="d-block mb-4 h-100">
+                <img class="img-fluid img-thumbnail" src="@item.FileUrl" alt="">
+            </a>
+        </div>
+}
+    </div>
+</div>

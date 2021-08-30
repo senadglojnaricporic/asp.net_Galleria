@@ -1,0 +1,49 @@
+@page
+@model UploadImageModel
+@{
+    ViewData["Title"] = "Upload Image";
+    ViewData["ActivePage"] = ManageNavPages.UploadImage;
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<div class="row">
+    <div class="col-md-6">
+        <form enctype="multipart/form-data" method="post">
+            <dl>
+                <dt>
+                    <label asp-for="UploadFormData.CategoryId"></label>
+                </dt>
+                <dd>
+                    <select class="form-control" asp-for="UploadFormData.CategoryId">
+                    @foreach (var item in Model.CategoriesList) {
+                        <option value="@item.CategoryId">@item.Description</option>
+                    }
+                    </select>
+                </dd>
+                <dt>
+                    <label asp-for="UploadFormData.ColorId"></label>
+                </dt>
+                <dd>
+                    <select class="form-control" asp-for="UploadFormData.ColorId">
+                    @foreach (var item in Model.ColorsList) {
+                        <option value="@item.ColorId">@item.Description</option>
+                    }
+                    </select>
+                </dd>
+                <dt>
+                    <label asp-for="UploadFormData.FormFile"></label>
+                </dt>
+                <dd>
+                    <div class="custom-file">
+                        <input class="custom-file-input" asp-for="UploadFormData.FormFile" type="file">
+                        <label class="custom-file-label" for="UploadFormData_FormFile">Choose file</label>
+                    </div>
+                    <span asp-validation-for="UploadFormData.FormFile"></span>
+                    <span>@Model.FileUploadValidationError</span>
+                </dd>
+            </dl>
+            <input asp-page-handler="Upload" class="btn btn-primary" type="submit" value="Upload"/>
+        </form>
+    </div>
+</div>

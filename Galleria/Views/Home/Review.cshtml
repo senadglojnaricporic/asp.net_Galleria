@@ -1,0 +1,88 @@
+@model Galleria.ReviewData
+
+@{
+    ViewData["Title"] = "Review";
+
+    //converting numerical grade into textual
+    String GradeText(double i)
+    {
+        var x = Math.Round(i);
+
+        switch (x)
+        {
+            case 1:
+                return "BAD";
+            case 2:
+                return "BELLOW AVERAGE";
+            case 3:
+                return "AVERAGE";
+            case 4:
+                return "VERY GOOD";
+            case 5:
+                return "EXCELLENT";
+            default:
+                return "";
+        }
+    }
+
+    var username = User.Identity.Name;
+}
+<h1>@ViewData["Title"]</h1>
+
+
+<div class="d-flex flex-column align-items-center w-100 mt-5">
+    <div class="w-75">
+        <img class="img-fluid img-thumbnail" src="@Model.FileUrl" alt="">
+    </div>
+    <div class="d-none d-md-block w-75 p-5 display-4 text-center grade-color-@Math.Round(Model.averageGrade)">Average grade: @GradeText(Model.averageGrade)</div>
+    <div class="d-md-none w-75 p-3 h1 font-weight-light text-center grade-color-@Math.Round(Model.averageGrade)">Average grade: @GradeText(Model.averageGrade)</div>
+    <div class="w-75 border-bottom p-3 mb-3">
+        <form asp-action="SendReview" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="newGrade" class="control-label"></label>
+                <select asp-for="newGrade" class="form-select w-50">
+                @foreach (var item in Model.GradesList) {
+                    <option value="@item.GradeId">@GradeText(item.GradeNum)</option>
+                }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="newComment" class="control-label"></label>
+                <textarea asp-for="newComment" class="form-control"></textarea>
+                <span asp-validation-for="newComment" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="photoId" value="@Model.photoId" class="form-control" />
+            <input type="hidden" asp-for="Username" value="@username" class="form-control" />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="w-75">
+@if (Model.isDuplicate) { //checks if user has allready voted
+        <p class="text-danger">You can't vote two times!</p> 
+}
+@foreach (var item in Model.ReviewList) {
+        <div class="d-flex flex-column bg-light p-3 mb-3 rounded shadow">
+            <div class="w-100 text-center grade-color-@item.Grade rounded rounded-pill">@GradeText(item.Grade)</div>
+            <div class="pt-5 pb-5">@item.Comment</div>
+            <div class="d-md-flex d-none">
+                <div class="mr-auto font-italic">@item.Username</div>
+                <div class="font-italic">@item.Timestamp</div>
+            </div>
+            <div class="d-md-none d-flex flex-column">
+                <div class="d-sm-block d-none">
+                    <div class="font-italic">@item.Username</div>
+                    <div class="font-italic">@item.Timestamp</div>
+                </div>
+                <div class="d-sm-none d-block">
+                    <div class="font-italic smaller-font">@item.Username</div>
+                    <div class="font-italic smaller-font">@item.Timestamp</div>
+                </div>
+            </div>
+        </div>
+}        
+    </div>
+</div>
+
